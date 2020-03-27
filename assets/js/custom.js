@@ -30,6 +30,11 @@ $(document).ready(function() {
     load: 'ex2.html'
   });
 
+  app.route({
+    view: 'form',
+    load: 'form.html'
+  });
+
 
   // run app
   app.run();
