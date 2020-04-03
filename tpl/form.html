@@ -52,8 +52,59 @@
       </div>
       </div>
     </div>
+
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Surname</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone Number</th>
+      <th scope="col">Delete</th>
+      <th scope="col">Info</th>
+    </tr>
+  </thead>
+  <tbody id="table_content">
+  </tbody>
+</table>
   </div>
 <script type="text/javascript">
+get_students();
+function get_students(){
+  $.get("rest/students", function(data){
+    var html = '';
+    for(var i = 0; i< data.length; i++){
+      html +='<tr><td>' + data[i].name + '</td>';
+      html +='<td>' + data[i].surname + '</td>';
+      html += '<td>' + data[i].phone_number + '</td>';
+      html += '<td>' + data[i].email + '</td>';
+      html += '<td><button type="button" class="btn btn-danger" onclick="delete_student('+data[i].id+');">Delete</button></td> </tr>';
+      html += '<td><button type="button" class="btn btn-info" onclick="get_student('+data[i].id+');">Infor</button></td> </tr>';
+
+    }
+    $("#table_content").html(html);
+  });
+}
+
+function delete_student(id){
+  $.ajax({
+    url: 'rest/student/'+id,
+    method: 'DELETE',
+    success: function(result) {
+        toastr.success('Deleted');
+        get_students();
+      },
+      error: function(){
+        toastr.success('Not deleted');
+      }
+  });
+}
+
+function get_student(id){
+  $.get('rest/student?id='+id, function(data){ console.log(data);
+    alert('Name: ' + data.name);
+  })
+}
 
   jQuery.validator.addMethod("custom_email", function(value, element) {
    return this.optional(element) || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
@@ -88,12 +139,13 @@ errorContainer: "#messageBox1, #messageBox2",
 errorLabelContainer: "#messageBox1 ul",
 wrapper: "li",
 submitHandler: function(form, validator) {
-   $('#test_form').get(0).reset();
-   $("div.error").hide();
-   console.log('Submit Handler');
-   alert('Great');
-   $('#myModal').modal('toggle');
-   toastr.success("Great");
+  $.post('rest/students', $("#test_form").serialize()).done(function(){
+       toastr.success('Student added');
+       $('#myModal').modal('toggle');
+       get_students();
+  }).fail(function(){
+    toastr.error('Student not added');
+  });
 },
 invalidHandler: function(event, validator) {
   var errors = validator.numberOfInvalids();
