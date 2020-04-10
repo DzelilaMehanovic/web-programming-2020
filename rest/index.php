@@ -20,6 +20,15 @@ Flight::route('POST /students', function(){
   Flight::json('Student has been added');
 });
 
+Flight::route('POST /student', function(){
+  $request = Flight::request()->data->getData();
+  unset($request['psword']);
+  $update = "UPDATE students SET name = :fname, surname = :lname, phone_number = :phone, email = :custom_email WHERE id = :id";
+  $stmt = Flight::db()->prepare($update);
+  $stmt->execute($request);
+  Flight::json('Updated');
+});
+
 Flight::route('DELETE /student/@id', function($id){
   $delete = 'DELETE FROM students WHERE id = :id';
   $stmt = Flight::db()->prepare($delete);
