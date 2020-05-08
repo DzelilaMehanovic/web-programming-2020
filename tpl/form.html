@@ -134,7 +134,7 @@ function get_students(){
 }
 
 function delete_student(id){
-  $.ajax({
+  /*$.ajax({
     url: 'rest/student/'+id,
     method: 'DELETE',
     success: function(result) {
@@ -144,7 +144,16 @@ function delete_student(id){
       error: function(){
         toastr.success('Not deleted');
       }
-  });
+  });*/
+
+    $.post('rest/student/delete', {id: id}).done(function(){
+         toastr.success('Student deleted');
+         get_students();
+    }).fail(function(){
+      toastr.error('Student was not deleted');
+    });
+
+
 }
 
 function get_student(id){
