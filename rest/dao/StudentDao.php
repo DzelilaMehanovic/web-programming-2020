@@ -30,6 +30,10 @@ class StudentDao extends BaseDao{
     $this->execute([':student_id' => $student_id], 'UPDATE ' . $this->table . ' SET status = 0 WHERE id = :student_id');
   }
 
+  public function get_user_by_email($user_email){
+    return $this->execute_query("SELECT * FROM " . $this->table . " WHERE email = :email", [":email" => $user_email])[0];
+  }
+
 }
 
  ?>

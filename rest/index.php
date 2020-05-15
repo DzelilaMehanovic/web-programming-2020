@@ -3,13 +3,20 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS, PATCH');
 
 require '../vendor/autoload.php';
-require 'config.php';
+require 'Auth.php';
 require 'dao/StudentDao.php';
 
 Flight::register('student_dao', 'StudentDao');
 //Flight::register('db', 'PDO', array('mysql:host=remotemysql.com;dbname=tEYQ0vL2Rn','tEYQ0vL2Rn','Xwqg1jEEB0'));
 
 Flight::route('GET /students', function(){
+  $data = apache_request_headers();
+  $user_data = Auth::decode_jwt($data);
+
+  if(!isset($user_data['data']['admin'])){
+    Flight::halt(403, 'It is allowed only for admin users');
+  }
+
 //  $students = Flight::db()->query('SELECT * FROM students', PDO::FETCH_ASSOC)->fetchAll();
   $students = Flight::student_dao()->get_all();
   Flight::json($students);
@@ -68,6 +75,30 @@ Flight::route('POST /student/delete', function(){
     Flight::student_dao()->remove_student($request['id']);
     Flight::json('Student Status Updated');
 });
+
+Flight::route('POST /login', function(){
+  $user = Flight::request()->data->getData();
+  $db_user = Flight::student_dao()->get_user_by_email($user['user_email']);
+
+  if($db_user){
+    if($db_user['password'] == $user['psword']){
+      $token_data = [
+        'id' => $db_user['id'],
+        'email' => $db_user['email'],
+        'name' => $db_user['name'],
+        'is_admin' => false
+      ];
+
+      $jwt = Auth::encode_jwt($token_data);
+      Flight::json(['user_token' => $jwt]);
+    } else {
+      Flight::halt(404, 'Password is not correct');
+    }
+  } else {
+    Flight::halt(404, 'User not found');
+  }
+});
+
 
 Flight::start();
 ?>
