@@ -62,7 +62,7 @@ class BaseDao{
     }
   }
 
-  public function update($entity, $query){ 
+  public function update($entity, $query){
     $this->execute($entity, $query);
   }
 

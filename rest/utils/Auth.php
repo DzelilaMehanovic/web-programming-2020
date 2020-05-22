@@ -1,7 +1,5 @@
 <?php
 use \Firebase\JWT\JWT;
-require 'config.php';
-
 class Auth{
   public function encode_jwt($token_data){
     $user_token = [
@@ -22,7 +20,7 @@ class Auth{
       $user_data = (array) JWT::decode($jwt, Config::JWT_SECRET, ['HS256']);
 
       $user_data['data'] = (array) $user_data['data'];
-      
+
       return $user_data;
     } catch (\Throwable $e) {
        Flight::halt(403, "Invalid token! Error: " . $e->getMessage());

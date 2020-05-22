@@ -36,37 +36,15 @@
         <i class="fas fa-bars"></i>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded " href="#highcharts">Highcharts</a>
-          </li>
-          <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded " href="#select2">Select 2</a>
-          </li>
-          <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#datatable">Datatable</a>
-          </li>
-          <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#ex1">Example 1</a>
-          </li>
-          <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#ex2">Example 2</a>
-          </li>
-          <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#form">Form</a>
-          </li>
+        <ul class="navbar-nav ml-auto" id="tabs">
+
         </ul>
       </div>
     </div>
   </nav>
 
     <main id="spapp" role="main">
-      <section id="highcharts">Highcharts</section>
-      <section id="select2"><h1>Select 2</h1></section>
-      <section id="datatable"><h1>Datatable</h1></section>
-      <section id="ex1"><h1>Example 1</h1></section>
-      <section id="ex2"><h1>Example 2</h1></section>
-      <section id="form"><h1>Form</h1></section>
+
     </main>
 
     <!--
@@ -83,6 +61,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="assets/js/jquery.spapp.js"></script>
 <script src="assets/js/custom.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/students.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/series-label.js"></script>
@@ -94,4 +74,48 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/js/toastr.js"></script>
 </body>
+
+<script>
+  if(localStorage.getItem('user_token')){
+    var user = Utils.parseJwt(localStorage.getItem('user_token'));
+
+    if(user.data.id == 22){
+        var nav = '<li class="nav-item mx-0 mx-lg-1">'+
+                      '<a class="nav-link py-3 px-0 px-lg-3 rounded " href="#highcharts">Highcharts</a>'+
+                  '  </li>'+
+                    '<li class="nav-item mx-0 mx-lg-1">'+
+                      '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#datatable">Datatable</a>'+
+                    '</li>'+
+                    '<li class="nav-item mx-0 mx-lg-1">'+
+                      '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#ex1">Example 1</a>'+
+                    '</li>'+
+                    '<li class="nav-item mx-0 mx-lg-1">'+
+                      '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#ex2">Example 2</a>'+
+                    '</li>'+
+                    '<li class="nav-item mx-0 mx-lg-1">'+
+                      '<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#form">Form</a>'+
+                    '</li>';
+      $("#tabs").html(nav);
+
+      var main = '<section id="highcharts">Highcharts</section>'+
+                  '<section id="datatable"><h1>Datatable</h1></section>'+
+                  '<section id="ex1"><h1>Example 1</h1></section>'+
+                  '<section id="ex2"><h1>Example 2</h1></section>'+
+                  '<section id="form"><h1>Form</h1></section>';
+        $('#spapp').html(main);
+    } else {
+      var nav = '<li class="nav-item mx-0 mx-lg-1">'+
+                  '<a class="nav-link py-3 px-0 px-lg-3 rounded " href="#select2">Select 2</a>'+
+                '</li>';
+      $("#tabs").html(nav);
+
+      var main = '<section id="select2"><h1>Select 2</h1></section>';
+      $('#spapp').html(main);
+    }
+  } else {
+    window.location = 'login.html';
+  }
+
+</script>
+
 </html>

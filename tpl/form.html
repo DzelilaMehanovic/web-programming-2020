@@ -98,64 +98,12 @@
       </div>
     </div>
 
-  <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Surname</th>
-      <th scope="col">Phone Number</th>
-      <th scope="col">Email</th>
-      <th scope="col">Delete</th>
-      <th scope="col">Info</th>
-      <th scope="col">Update</th>
-    </tr>
-  </thead>
-  <tbody id="table_content">
-  </tbody>
+  <table class="table" id="table_content">
 </table>
   </div>
 <script type="text/javascript">
-get_students();
-function get_students(){
-/*  $.get("rest/students", function(data){
-    var html = '';
-    for(var i = 0; i< data.length; i++){
-      html +='<tr><td>' + data[i].name + '</td>';
-      html +='<td>' + data[i].surname + '</td>';
-      html += '<td>' + data[i].phone_number + '</td>';
-      html += '<td>' + data[i].email + '</td>';
-      html += '<td><button type="button" class="btn btn-danger" onclick="delete_student('+data[i].id+');">Delete</button></td>';
-      html += '<td><button type="button" class="btn btn-info" onclick="get_student('+data[i].id+');">Info</button></td>';
-      html += '<td><button type="button" class="btn btn-info" onclick="open_edit_modal('+data[i].id+');">Edit</button></td> </tr>';
+Student.get_students();
 
-    }
-    $("#table_content").html(html);
-  });*/
-
-  $.ajax({
-     url: "rest/students",
-     type: "GET",
-     beforeSend: function(xhr){
-       xhr.setRequestHeader('authorization', 'Bearer ' +  localStorage.getItem("user_token"));
-     },
-     success: function(data) {
-       var html = '';
-       for(var i = 0; i < data.length; i++){
-         html += '<tr> <td>' + data[i].name + '</td>';
-         html += '<td>' + data[i].surname + '</td>';
-         html += '<td>' + data[i].phone_number + '</td>';
-         html += '<td>' + data[i].email + '</td>';
-         html += '<td><button type="button" class="btn btn-danger" onclick="delete_student('+data[i].id+');">Delete</button></td>';
-         html += '<td><button type="button" class="btn btn-info" onclick="get_student('+data[i].id+');">Info</button></td>';
-         html += '<td><button type="button" class="btn btn-info" onclick="open_edit_modal('+data[i].id+');">Edit</button></td> </tr>';
-       }
-       $("#table_content").html(html);
-     },
-     error: function(data){  
-       toastr.error(data.responseText);
-     }
-    });
-}
 
 function delete_student(id){
   /*$.ajax({

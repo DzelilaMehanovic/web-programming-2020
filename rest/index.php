@@ -2,25 +2,31 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS, PATCH');
 
-require '../vendor/autoload.php';
-require 'Auth.php';
-require 'dao/StudentDao.php';
+require_once '../vendor/autoload.php';
 
+require_once 'config/config.php';
+require_once 'utils/Auth.php';
+require_once 'dao/BaseDao.php';
+require_once 'dao/StudentDao.php';
+require_once 'service/StudentService.php';
+require_once 'routes/students.php';
+
+Flight::register('student_service', 'StudentService');
 Flight::register('student_dao', 'StudentDao');
 //Flight::register('db', 'PDO', array('mysql:host=remotemysql.com;dbname=tEYQ0vL2Rn','tEYQ0vL2Rn','Xwqg1jEEB0'));
 
-Flight::route('GET /students', function(){
+/*Flight::route('GET /students', function(){
   $data = apache_request_headers();
   $user_data = Auth::decode_jwt($data);
 
-  if(!isset($user_data['data']['admin'])){
+/*  if(!isset($user_data['data']['admin'])){
     Flight::halt(403, 'It is allowed only for admin users');
-  }
+  }*/
 
 //  $students = Flight::db()->query('SELECT * FROM students', PDO::FETCH_ASSOC)->fetchAll();
-  $students = Flight::student_dao()->get_all();
+/*  $students = Flight::student_dao()->get_all();
   Flight::json($students);
-});
+});*/
 
 Flight::route('GET /student', function(){
   $id = Flight::request()->query['id'];
