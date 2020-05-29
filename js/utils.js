@@ -12,6 +12,20 @@ var Utils = {
    } else {
      return null;
    }
-  }
+ },
+
+ datatable : function(table_id, columns, data){
+   if($.fn.dataTable.isDataTable('#'+table_id)){
+     $('#'+table_id).DataTable().destroy();
+   }
+
+   $('#' + table_id).DataTable({
+       data: data,
+       columns: columns,
+       "pageLength": 10,
+       "lengthMenu": [2, 5, 10, 25, 50, "All"]
+   });
+ },
+
 
 }
